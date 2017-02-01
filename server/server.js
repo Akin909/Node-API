@@ -35,7 +35,6 @@ app.get('/todos', (req,res) => {
 app.get('/todos/:id', function(req, res){
 
 	var id = req.params.id;
-console.log(ObjectID.isValid(id)) 
 	if (!ObjectID.isValid(id)) {
 	return	res.status(404).send();
 	}
@@ -47,7 +46,22 @@ console.log(ObjectID.isValid(id))
 	}).catch((err) => res.status(400).send())
 });
 
+app.delete('/todos/:id',(req,res) => {
+	var id = req.params.id;
+	if (!ObjectID.isValid( id )) {
+		res.status(404).send()	
+	}
+	Todo.findByIdAndRemove(id).then((todo) => {
+		if (!todo) {
+			res.status(404).send()	
+		}	
+		res.status(200).send(todo);
+		if (todo.text === '') {
+			res.status(400).send();	
+		}
+	})	
 
+})
 
 app.listen(port, () => {
 	console.log(`Server up on port ${port}`); 	
