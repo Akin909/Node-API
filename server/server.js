@@ -8,6 +8,7 @@ var {Todo} = require('./db/models/todo.js');
 var {User} = require('./db/models/user.js');
 
 var app = express();
+var port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
@@ -48,8 +49,8 @@ console.log(ObjectID.isValid(id))
 
 
 
-app.listen(3000, () => {
-	console.log('Server up on port 3000'); 	
+app.listen(port, () => {
+	console.log(`Server up on port ${port}`); 	
 })
 
 module.exports = {app}; 
