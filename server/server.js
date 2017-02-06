@@ -1,3 +1,4 @@
+require('./config/config.js')
 var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('lodash');
@@ -17,7 +18,7 @@ var {
 } = require('./db/models/user.js');
 
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 
 app.use(bodyParser.json());
 
@@ -92,26 +93,28 @@ app.patch('/todos/:id', (req, res) => {
 		return res.status(404).send();
 	}
 
-if (_.isBoolean(body.completed) && body.completed) {
-	body.completedAt = new Date().getTime();
+	if (_.isBoolean(body.completed) && body.completed) {
+		body.completedAt = new Date().getTime();
 	} else {
 		body.completed = false;
 		body.completedAt = null;
-}
-
-Todo.findByIdAndUpdate(id,{
-	$set: body
-},{
-	new: true
-}).then((todo) => {
-	if (!todo) {
-		return res.status(404).send();
 	}
 
-	res.send({todo});
-}).catch((error) => {
-	res.status(400).send();
-})
+	Todo.findByIdAndUpdate(id, {
+		$set: body
+	}, {
+		new: true
+	}).then((todo) => {
+		if (!todo) {
+			return res.status(404).send();
+		}
+
+		res.send({
+			todo
+		});
+	}).catch((error) => {
+		res.status(400).send();
+	})
 
 })
 
