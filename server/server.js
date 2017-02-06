@@ -106,7 +106,7 @@ Todo.findByIdAndUpdate(id,{
 }).then((todo) => {
 	if (!todo) {
 		return res.status(404).send();
-	}	
+	}
 
 	res.send({todo});
 }).catch((error) => {
