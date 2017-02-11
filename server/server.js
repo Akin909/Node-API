@@ -117,8 +117,17 @@ app.patch('/todos/:id', (req, res) => {
 	})
 
 })
-
-
+// Post user to the database with email and password validation
+app.post('/users',(req,res) => {
+	// Use lodash pick method to pull email and password properties of body object
+	var body = _.pick(req.body,['email','password'])	
+	var user = new User(body);
+	user.save().then((user) => {
+		res.status(200).send(user);
+		},	(err) => {
+		res.status(404).send(err);
+	})
+})
 
 app.listen(port, () => {
 	console.log(`Server up on port ${port}`);
