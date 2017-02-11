@@ -16,7 +16,7 @@ var {
 var {
 	User
 } = require('./db/models/user.js');
-
+var {authenticate} = require('./middleware/authenticate');
 var app = express();
 var port = process.env.PORT;
 
@@ -133,6 +133,12 @@ app.post('/users',(req,res) => {
 	})
 })
 
+
+
+
+app.get('/users/me',authenticate,(req,res) => {
+	res.send(req.user);
+})
 app.listen(port, () => {
 	console.log(`Server up on port ${port}`);
 })
