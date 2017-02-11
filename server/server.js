@@ -122,9 +122,13 @@ app.post('/users',(req,res) => {
 	// Use lodash pick method to pull email and password properties of body object
 	var body = _.pick(req.body,['email','password'])	
 	var user = new User(body);
-	user.save().then((user) => {
-		res.status(200).send(user);
-		},	(err) => {
+
+	user.save().then(() => {
+		return user.generateAuthToken();
+
+	}).then((token) => {
+	res.header('x-auth',token).send(user);	
+	}).catch((err) => {
 		res.status(404).send(err);
 	})
 })
